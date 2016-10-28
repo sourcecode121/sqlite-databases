@@ -37,6 +37,10 @@ public class AddUserActivity extends AppCompatActivity {
                         Integer.valueOf(age.getText().toString())
                 );
                 if(result) {
+                    firstName.setText("");
+                    lastName.setText("");
+                    age.setText("");
+                    firstName.requestFocus();
                     Toast.makeText(AddUserActivity.this, "Added user to the database", Toast.LENGTH_SHORT).show();
                 }
                 else {

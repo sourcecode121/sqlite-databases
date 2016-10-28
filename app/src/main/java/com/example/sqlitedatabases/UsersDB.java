@@ -2,8 +2,12 @@ package com.example.sqlitedatabases;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.R.attr.version;
 
@@ -29,8 +33,9 @@ public class UsersDB extends SQLiteOpenHelper {
                     USERS_COLUMN_AGE + " INTEGER" +
                     ")";
 
-    private static final String USERS_DROP_TABLE =
-                    "DROP TABLE IF EXISTS " + USERS_TABLE_NAME;
+    private static final String USERS_DROP_TABLE = "DROP TABLE IF EXISTS " + USERS_TABLE_NAME;
+
+    private static final String USERS_SELECT_ALL = "SELECT * FROM " + USERS_TABLE_NAME;
 
     public UsersDB(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -55,5 +60,27 @@ public class UsersDB extends SQLiteOpenHelper {
         contentValues.put(USERS_COLUMN_AGE, age);
         sqLiteDatabase.insert(USERS_TABLE_NAME, null, contentValues);
         return true;
+    }
+
+    public List<User> getUsers() {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        List<User> users = new ArrayList<>();
+        Cursor result = sqLiteDatabase.rawQuery(USERS_SELECT_ALL, null);
+        try {
+            if (result.moveToFirst()) {
+                while (!result.isAfterLast()) {
+                    User user = new User();
+                    user.setFirstName(result.getString(result.getColumnIndex(USERS_COLUMN_FIRST_NAME)));
+                    user.setLastName(result.getString(result.getColumnIndex(USERS_COLUMN_LAST_NAME)));
+                    user.setAge(result.getInt(result.getColumnIndex(USERS_COLUMN_AGE)));
+                    users.add(user);
+                    result.moveToNext();
+                }
+            }
+        }
+        finally {
+            result.close();
+        }
+        return users;
     }
 }
