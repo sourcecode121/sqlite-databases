@@ -4,6 +4,7 @@ package com.example.sqlitedatabases;
  * Created by Anand on 28/10/2016.
  */
 public class User {
+    private int id;
     private String firstName;
     private String lastName;
     private int age;
@@ -11,10 +12,12 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, int age) {
-        this.setFirstName(firstName);
-        this.setLastName(lastName);
-        this.setAge(age);
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {
