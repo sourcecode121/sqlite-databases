@@ -58,7 +58,9 @@ public class UsersDB extends SQLiteOpenHelper {
         contentValues.put(USERS_COLUMN_FIRST_NAME, firstName);
         contentValues.put(USERS_COLUMN_LAST_NAME, lastName);
         contentValues.put(USERS_COLUMN_AGE, age);
-        sqLiteDatabase.insert(USERS_TABLE_NAME, null, contentValues);
+        if(sqLiteDatabase.insert(USERS_TABLE_NAME, null, contentValues) <= 0) {
+            return false;
+        }
         return true;
     }
 
@@ -91,14 +93,18 @@ public class UsersDB extends SQLiteOpenHelper {
         contentValues.put(USERS_COLUMN_FIRST_NAME, firstName);
         contentValues.put(USERS_COLUMN_LAST_NAME, lastName);
         contentValues.put(USERS_COLUMN_AGE, age);
-        sqLiteDatabase.update(USERS_TABLE_NAME, contentValues, "id = ? ",
-                                new String[]{ String.valueOf(id) });
+        if(sqLiteDatabase.update(USERS_TABLE_NAME, contentValues, "id = ? ",
+                                new String[]{ String.valueOf(id) }) == 0) {
+            return false;
+        }
         return true;
     }
 
     public boolean deleteUserDetails(int id) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        sqLiteDatabase.delete(USERS_TABLE_NAME, "id = ? ", new String[]{ String.valueOf(id) });
+        if(sqLiteDatabase.delete(USERS_TABLE_NAME, "id = ? ", new String[]{ String.valueOf(id) }) == 0) {
+            return false;
+        }
         return true;
     }
 }
